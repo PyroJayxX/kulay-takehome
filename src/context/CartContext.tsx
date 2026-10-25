@@ -1,8 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { CartItem, Product } from "../types";
 
 interface CartContextValue {
   cartItems: CartItem[];
+  itemCount: number;
+  total: number;
   addToCart: (product: Product) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
@@ -13,6 +15,18 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // total quantity across all rows, not number of rows
+  const itemCount = useMemo(
+    () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
+    [cartItems]
+  );
+
+  // sum of price * quantity
+  const total = useMemo(
+    () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [cartItems]
+  );
 
   // add new item, increments if already exists
   const addToCart = (product: Product) => {
@@ -43,7 +57,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, decreaseQuantity, removeFromCart }}
+      value={{
+        cartItems,
+        itemCount,
+        total,
+        addToCart,
+        decreaseQuantity,
+        removeFromCart,
+      }}
     >
       {children}
     </CartContext.Provider>
