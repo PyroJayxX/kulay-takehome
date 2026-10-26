@@ -11,3 +11,11 @@ export interface Product {
 export interface CartItem extends Product {
   quantity: number;
 }
+
+export type DiscountType = "percent" | "fixed";
+
+export interface Voucher {
+  code: string;
+  type: DiscountType;
+  value: number;
+}

@@ -13,6 +13,7 @@ export default function CartScreen() {
   const { cartItems, itemCount, total, removeFromCart } = useCart();
   const {
     appliedCode,
+    discountLabel,
     error,
     discount,
     discountedTotal,
@@ -122,6 +123,7 @@ export default function CartScreen() {
                 <View className="mb-3 border-b border-gray-100 pb-3">
                   <VoucherInput
                     appliedCode={appliedCode}
+                    discountLabel={discountLabel}
                     error={error}
                     onApply={applyVoucher}
                     onRemove={removeVoucher}
@@ -137,7 +139,7 @@ export default function CartScreen() {
                 {/* discount row only shows once a voucher is applied */}
                 {appliedCode && (
                   <View className="mt-1 flex-row items-center justify-between">
-                    <Text className="text-sm text-green-600">Discount (10%)</Text>
+                    <Text className="text-sm text-green-600">Discount ({discountLabel})</Text>
                     <Text className="text-sm text-green-600">-₱{discount.toFixed(2)}</Text>
                   </View>
                 )}

@@ -1,49 +1,59 @@
 import { useEffect, useMemo, useState } from "react";
-
-// the only valid code and its rate
-const VOUCHER_CODE = "discount10";
-const DISCOUNT_RATE = 0.1;
+import { vouchers } from "../data/vouchers";
+import { Voucher } from "../types";
 
 export function useVoucher(subtotal: number, itemCount: number) {
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [appliedVoucher, setAppliedVoucher] = useState<Voucher | null>(null);
   const [error, setError] = useState("");
 
   // drop the voucher when the cart becomes empty
   useEffect(() => {
     if (itemCount === 0) {
-      setAppliedCode(null);
+      setAppliedVoucher(null);
       setError("");
     }
   }, [itemCount]);
 
-  // trim and lowercase so "  DISCOUNT10 " still works
   const applyVoucher = (input: string) => {
-    if (input.trim().toLowerCase() === VOUCHER_CODE) {
-      setAppliedCode(VOUCHER_CODE);
+    const code = input.trim()
+    const match = vouchers.find((voucher) => voucher.code === code);
+
+    if (match) {
+      setAppliedVoucher(match);
       setError("");
     } else {
       setError("Invalid voucher code");
     }
   };
 
-  // lets the user take the voucher back off
   const removeVoucher = () => {
-    setAppliedCode(null);
+    setAppliedVoucher(null);
     setError("");
   };
 
   const clearError = () => setError("");
 
-  // rounded to 2 decimals to avoid float noise
-  const discount = useMemo(
-    () => (appliedCode ? Math.round(subtotal * DISCOUNT_RATE * 100) / 100 : 0),
-    [appliedCode, subtotal]
-  );
+  const discount = useMemo(() => {
+    if (!appliedVoucher) return 0;
+    if (appliedVoucher.type === "percent") {
+      return Math.round(subtotal * appliedVoucher.value) / 100;
+    }
+    // fixed discount can never push the total below zero
+    return Math.min(appliedVoucher.value, subtotal);
+  }, [appliedVoucher, subtotal]);
 
   const discountedTotal = useMemo(() => subtotal - discount, [subtotal, discount]);
 
+  const discountLabel = useMemo(() => {
+    if (!appliedVoucher) return "";
+    return appliedVoucher.type === "percent"
+      ? `${appliedVoucher.value}% off`
+      : `₱${appliedVoucher.value} off`;
+  }, [appliedVoucher]);
+
   return {
-    appliedCode,
+    appliedCode: appliedVoucher ? appliedVoucher.code : null,
+    discountLabel,
     error,
     discount,
     discountedTotal,

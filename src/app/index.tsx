@@ -11,7 +11,7 @@ export default function ProductsScreen() {
 
   return (
     <SafeAreaView edges={["bottom"]} className="flex-1 bg-gray-100">
-      <Stack.Screen options={{ title: "Kulay Seafood Grill" }} />
+      <Stack.Screen options={{ title: "Products List" }} />
 
       <FlatList
         data={products}
