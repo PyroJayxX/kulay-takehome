@@ -6,6 +6,7 @@ export const products: Product[] = [
     productName: "Grilled Tuna Belly",
     description: "Char-grilled tuna belly served with garlic rice and calamansi.",
     price: 320,
+    image: require("../../assets/images/products/grilled-tuna-belly.jpg"),
   },
   {
     id: "2",
