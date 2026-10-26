@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
 import { FlatList, KeyboardAvoidingView, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,7 +32,8 @@ export default function CartScreen() {
           }
           ListEmptyComponent={
             <View className="items-center py-16">
-              <Text className="text-lg text-gray-500">Your cart is empty</Text>
+              <Ionicons name="cart-outline" size={56} color="#9ca3af" />
+              <Text className="mt-3 text-lg text-gray-500">Your cart is empty</Text>
               <Pressable
                 onPress={() => router.back()}
                 className="mt-4 rounded-full bg-orange-500 px-5 py-3 active:bg-orange-600"

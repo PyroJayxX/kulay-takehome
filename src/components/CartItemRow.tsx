@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 import { useCart } from "../context/CartContext";
 import { CartItem } from "../types";
@@ -19,8 +20,13 @@ export default function CartItemRow({ item }: CartItemRowProps) {
         </View>
 
         {/* deletes the whole row regardless of quantity */}
-        <Pressable onPress={() => removeFromCart(item.id)} className="active:opacity-60">
-          <Text className="text-sm font-semibold text-red-500">Remove</Text>
+        <Pressable
+          onPress={() => removeFromCart(item.id)}
+          accessibilityLabel={`Remove ${item.productName}`}
+          hitSlop={8}
+          className="active:opacity-60"
+        >
+          <Ionicons name="trash-outline" size={22} color="#ef4444" />
         </Pressable>
       </View>
 
