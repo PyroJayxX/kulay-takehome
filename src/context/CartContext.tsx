@@ -41,13 +41,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // -1, and the item is removed once it reaches 0
   const decreaseQuantity = (id: string) => {
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+      prev
+        .map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item))
+        .filter((item) => item.quantity > 0)
     );
   };
 
