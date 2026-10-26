@@ -11,10 +11,17 @@ import { useVoucher } from "../hooks/useVoucher";
 export default function CartScreen() {
   const router = useRouter();
   const { cartItems, itemCount, total, removeFromCart } = useCart();
-  const { appliedCode, error, discount, discountedTotal, applyVoucher, clearError } =
-    useVoucher(total, itemCount);
+  const {
+    appliedCode,
+    error,
+    discount,
+    discountedTotal,
+    applyVoucher,
+    removeVoucher,
+    clearError,
+  } = useVoucher(total, itemCount);
 
-   // checkbox toggle for item deletion
+  // checkbox toggle for item deletion
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -110,14 +117,18 @@ export default function CartScreen() {
             </View>
           ) : (
             <>
-              <VoucherInput
-                appliedCode={appliedCode}
-                error={error}
-                onApply={applyVoucher}
-                onChangeText={clearError}
-              />
-
               <View className="mx-4 mb-2 rounded-2xl bg-white px-5 py-4 shadow-sm">
+                {/* voucher sits at the top of the totals card */}
+                <View className="mb-3 border-b border-gray-100 pb-3">
+                  <VoucherInput
+                    appliedCode={appliedCode}
+                    error={error}
+                    onApply={applyVoucher}
+                    onRemove={removeVoucher}
+                    onChangeText={clearError}
+                  />
+                </View>
+
                 <View className="flex-row items-center justify-between">
                   <Text className="text-sm text-gray-600">Subtotal</Text>
                   <Text className="text-sm text-gray-900">₱{total.toFixed(2)}</Text>

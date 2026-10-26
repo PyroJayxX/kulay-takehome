@@ -26,6 +26,12 @@ export function useVoucher(subtotal: number, itemCount: number) {
     }
   };
 
+  // lets the user take the voucher back off
+  const removeVoucher = () => {
+    setAppliedCode(null);
+    setError("");
+  };
+
   const clearError = () => setError("");
 
   // rounded to 2 decimals to avoid float noise
@@ -36,5 +42,13 @@ export function useVoucher(subtotal: number, itemCount: number) {
 
   const discountedTotal = useMemo(() => subtotal - discount, [subtotal, discount]);
 
-  return { appliedCode, error, discount, discountedTotal, applyVoucher, clearError };
+  return {
+    appliedCode,
+    error,
+    discount,
+    discountedTotal,
+    applyVoucher,
+    removeVoucher,
+    clearError,
+  };
 }
